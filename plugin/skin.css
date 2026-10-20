@@ -698,10 +698,12 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   will-change: transform;
 }
 #moss-mark .wm {
-  font-family: Consolas, "Cascadia Mono", monospace;
+  /* Bahnschrift, not Consolas: Consolas draws a slashed zero, and once the "0"
+     is painted red the slash reads as a broken glyph. */
+  font-family: "Bahnschrift", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
   font-size: clamp(26px, 4.4vmin, 54px);
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   line-height: 1;
   color: rgba(214, 232, 255, 0.3);
   /* the lens glow sits right behind this block; a dark contact shadow keeps the
@@ -726,8 +728,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
    dot ring on the black cradle, and the radar sweep stay fixed. The brief was
    "黑圆红点固定不动" — that is .m-rot-d (dots) plus the disc itself. */
 .m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep { transform-origin: 250px 250px; }
-.m-rot-b { animation: moss-spin-rev 34s linear infinite; }
-.m-rot-c { animation: moss-spin 90s linear infinite; }
+.m-rot-b { animation: moss-spin-rev 30s linear infinite; }
+.m-rot-c { animation: moss-spin 48s linear infinite; }
 .m-rot-a, .m-rot-d, .m-sweep { animation: none; }
 .m-iris { transform-origin: 250px 250px; animation: moss-breathe 4.2s ease-in-out infinite; }
 /* Pointer offset lives on its own wrapper, in viewBox user units, so it composes

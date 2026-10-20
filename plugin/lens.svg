@@ -24,10 +24,16 @@
   <!-- ambient halo -->
   <circle cx="250" cy="250" r="238" fill="url(#moss-halo-grad)" class="m-glow" />
 
-  <!-- outermost micrometer ring, slow drift -->
+  <!-- outermost micrometer ring, slow drift.
+       A uniform dot ring (and evenly spaced arcs) is rotationally symmetric, so a
+       slow spin shows nothing. The uneven arc pattern plus the index pointer make
+       the rotation legible. -->
   <g class="m-rot-c">
     <circle cx="250" cy="250" r="234" stroke="#8a0b0b" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="1 11" />
-    <circle cx="250" cy="250" r="226" stroke="#ff2d2d" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="46 210" />
+    <circle cx="250" cy="250" r="226" stroke="#ff2d2d" stroke-opacity="0.16" stroke-width="1.6"
+            stroke-dasharray="128 38 22 104 62 152" />
+    <path d="M250 5l7 13h-14z" fill="#ff2d2d" fill-opacity="0.6" />
+    <path d="M250 18v9" stroke="#ff2d2d" stroke-opacity="0.45" stroke-width="2" />
   </g>
 
   <!-- armored housing ring, counter-rotating segments -->
