@@ -203,8 +203,12 @@ function mountLens(disposers, isDead) {
   // instead of the lens's own box (which the composer overlaps).
   const mark = document.createElement('div')
   mark.id = 'moss-mark'
+  // No <b> for the red zero: the host styles bare inline elements and the glyph
+  // came out at a fraction of the size. Inline metrics keep it in line whatever
+  // the host CSS does.
   mark.innerHTML =
-    '<div class="wm">55<b>0</b>W</div>' +
+    '<div class="wm">55<span class="wm-zero" style="color:rgba(255,45,45,0.62);font-size:inherit;' +
+    'font-weight:inherit;font-family:inherit;line-height:inherit;vertical-align:baseline">0</span>W</div>' +
     '<div class="wm-sub">Intelligent Quantum Computer 550W [MOSS]</div>'
   document.body.appendChild(mark)
   disposers.push(() => { try { mark.remove() } catch {} })

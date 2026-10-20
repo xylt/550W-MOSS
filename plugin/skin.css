@@ -710,9 +710,16 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
      glyphs readable there instead of dissolving into the red. */
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 26px rgba(255, 45, 45, 0.2);
 }
-#moss-mark .wm b {
+/* The red zero. A plain <b> picked up the host's inline-element styling and
+   rendered at a fraction of the size, so it is a span whose inherited metrics
+   are pinned here as well as inline in the markup. */
+#moss-mark .wm .wm-zero {
   color: rgba(255, 45, 45, 0.62);
-  font-weight: 700;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
 }
 #moss-mark .wm-sub {
   font-family: Consolas, "Cascadia Mono", monospace;
@@ -728,8 +735,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
    dot ring on the black cradle, and the radar sweep stay fixed. The brief was
    "黑圆红点固定不动" — that is .m-rot-d (dots) plus the disc itself. */
 .m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep { transform-origin: 250px 250px; }
-.m-rot-b { animation: moss-spin-rev 30s linear infinite; }
-.m-rot-c { animation: moss-spin 48s linear infinite; }
+.m-rot-b { animation: moss-spin-rev 24s linear infinite; }
+.m-rot-c { animation: moss-spin 56s linear infinite; }
 .m-rot-a, .m-rot-d, .m-sweep { animation: none; }
 .m-iris { transform-origin: 250px 250px; animation: moss-breathe 4.2s ease-in-out infinite; }
 /* Pointer offset lives on its own wrapper, in viewBox user units, so it composes

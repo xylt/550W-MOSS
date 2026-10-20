@@ -154,7 +154,7 @@ const tagCount = (lensMarkup.match(/m-tag/g) ?? []).length
 
 const mark = pageBody.children?.find?.((c) => c.id === 'moss-mark')
 if (!mark) throw new Error('550W watermark was not mounted')
-if (!`${mark.innerHTML ?? ''}`.includes('55<b>0</b>W')) throw new Error('watermark glyphs missing')
+if (!`${mark.innerHTML ?? ''}`.includes('wm-zero')) throw new Error('red zero glyph was replaced by a bare inline element')
 if (!`${mark.innerHTML ?? ''}`.includes('550W [MOSS]')) throw new Error('watermark caption missing')
 
 const balance = pageBody.children?.find?.((c) => c.id === 'moss-balance')
