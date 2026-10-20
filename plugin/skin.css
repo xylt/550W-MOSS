@@ -12,8 +12,8 @@ body[data-dsh-skin-moss-550c] {
      slab after the first pass; this separates sidebar / transcript / composer. */
   --dsw-alias-bg-base: #101c2a;
   --dsw-specific-sidebar-fill: #12100b;
-  --dsw-alias-brand-primary: #e8a020;
-  --dsw-alias-label-primary: #ffc043;
+  --dsw-alias-brand-primary: #cf9a3f;
+  --dsw-alias-label-primary: #e6b968;
 }
 
 /* Height-chain guard: when the dark theme attr is applied directly (no
@@ -25,14 +25,17 @@ html, body, #root {
 }
 
 :root {
-  --moss-amber: #e8a020;
-  --moss-amber-b: #ffc043;
-  --moss-amber-d: #8a5e10;
-  --moss-amber-fade: rgba(232, 160, 32, 0.35);
-  --moss-text: #e6d2a8;
+  /* Muted palette: the first pass used #cf9a3f / #d8cbb4, which read as neon
+     amber against the dark shell. Desaturated ~15% and pulled the text towards
+     neutral so long reading sessions are calmer. */
+  --moss-amber: #cf9a3f;
+  --moss-amber-b: #e6b968;
+  --moss-amber-d: #7d5c22;
+  --moss-amber-fade: rgba(207, 154, 63, 0.35);
+  --moss-text: #d8cbb4;
   /* second lift: dim/faint still read as "off" against the lifted base */
-  --moss-text-dim: #c3a874;
-  --moss-text-faint: #957f52;
+  --moss-text-dim: #b3a78f;
+  --moss-text-faint: #8d8270;
   --moss-red: #e05030;
   --moss-red-b: #ff7050;
   --moss-red-core: #ff2d2d;
@@ -53,8 +56,8 @@ html body::after {
   z-index: 1;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(232, 160, 32, 0.03) 0,
-    rgba(232, 160, 32, 0.03) 1px,
+    rgba(207, 154, 63, 0.03) 0,
+    rgba(207, 154, 63, 0.03) 1px,
     transparent 1px,
     transparent 3px
   );
@@ -120,7 +123,7 @@ div[class*="sidebarCol"] [class*="sectionHeader"] [class*="sectionLabel"] {
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  text-shadow: 0 0 8px rgba(232, 160, 32, 0.35);
+  text-shadow: 0 0 8px rgba(207, 154, 63, 0.35);
 }
 /* green online LED before the label */
 div[class*="sidebarCol"] [class*="sectionHeader"] [class*="sectionLabel"]::before {
@@ -160,7 +163,7 @@ div[class*="sidebarCol"] [class*="projectRow"] {
   transition: background 0.15s ease, color 0.15s ease;
 }
 div[class*="sidebarCol"] [class*="projectRow"]:hover {
-  background: rgba(232, 160, 32, 0.08);
+  background: rgba(207, 154, 63, 0.08);
   color: var(--moss-text);
 }
 div[class*="sidebarCol"] [class*="projectRow"] [class*="folder"],
@@ -193,7 +196,7 @@ div[class*="sidebarCol"] [class*="sessionRow"] {
   transition: background 0.15s ease, color 0.15s ease;
 }
 div[class*="sidebarCol"] [class*="sessionRow"]:hover {
-  background: rgba(232, 160, 32, 0.08);
+  background: rgba(207, 154, 63, 0.08);
   color: var(--moss-text);
 }
 div[class*="sidebarCol"] [class*="sessionRow"] [class*="title"] {
@@ -222,9 +225,9 @@ div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"],
 div[class*="sidebarCol"] [class*="sessionRow"][aria-selected="true"],
 div[class*="sidebarCol"] [class*="sessionRow"].selected {
   color: var(--moss-amber-b);
-  background: linear-gradient(90deg, rgba(232, 160, 32, 0.24), rgba(232, 160, 32, 0.05) 72%, transparent);
+  background: linear-gradient(90deg, rgba(207, 154, 63, 0.24), rgba(207, 154, 63, 0.05) 72%, transparent);
   border-left: 3px solid var(--moss-amber);
-  box-shadow: inset 0 0 18px rgba(232, 160, 32, 0.08);
+  box-shadow: inset 0 0 18px rgba(207, 154, 63, 0.08);
 }
 div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"] [class*="time"],
 div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"] [class*="meta"] {
@@ -250,7 +253,7 @@ div[class*="sidebarCol"] [class*="panelRow"] {
   transition: background 0.15s ease, color 0.15s ease;
 }
 div[class*="sidebarCol"] [class*="panelRow"]:hover {
-  background: rgba(232, 160, 32, 0.08);
+  background: rgba(207, 154, 63, 0.08);
   color: var(--moss-amber-b);
 }
 
@@ -260,12 +263,12 @@ div[class*="sidebarCol"] input {
   border: 1px solid var(--moss-amber-d) !important;
   color: var(--moss-text) !important;
   font-family: Consolas, monospace !important;
-  box-shadow: inset 0 0 18px rgba(232, 160, 32, 0.05);
+  box-shadow: inset 0 0 18px rgba(207, 154, 63, 0.05);
 }
 div[class*="sidebarCol"] input::placeholder { color: var(--moss-text-faint) !important; }
 div[class*="sidebarCol"] input:focus {
   border-color: var(--moss-amber) !important;
-  box-shadow: 0 0 0 1px rgba(232, 160, 32, 0.3), inset 0 0 18px rgba(232, 160, 32, 0.08);
+  box-shadow: 0 0 0 1px rgba(207, 154, 63, 0.3), inset 0 0 18px rgba(207, 154, 63, 0.08);
   outline: none !important;
 }
 
@@ -295,24 +298,24 @@ div[class*="sidebarCol"] [class*="footArea"] button[class*="trigger"] {
   /* no border: that was the second frame */
   border: 0;
   border-radius: 9px;
-  background: linear-gradient(180deg, rgba(232, 160, 32, 0.15), rgba(232, 160, 32, 0.05));
+  background: linear-gradient(180deg, rgba(207, 154, 63, 0.15), rgba(207, 154, 63, 0.05));
   -webkit-backdrop-filter: blur(9px) saturate(1.2);
   backdrop-filter: blur(9px) saturate(1.2);
   box-shadow:
     inset 0 1px 0 rgba(255, 205, 120, 0.16),
-    inset 0 0 22px rgba(232, 160, 32, 0.05),
+    inset 0 0 22px rgba(207, 154, 63, 0.05),
     0 6px 18px rgba(0, 0, 0, 0.45);
   color: var(--moss-text);
   font-family: Consolas, "Cascadia Mono", monospace;
   transition: background 0.14s ease, box-shadow 0.14s ease, color 0.14s ease;
 }
 div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"]:hover {
-  background: linear-gradient(180deg, rgba(232, 160, 32, 0.2), rgba(232, 160, 32, 0.07));
+  background: linear-gradient(180deg, rgba(207, 154, 63, 0.2), rgba(207, 154, 63, 0.07));
   box-shadow:
     inset 0 1px 0 rgba(255, 205, 120, 0.22),
-    inset 0 0 22px rgba(232, 160, 32, 0.08),
+    inset 0 0 22px rgba(207, 154, 63, 0.08),
     0 6px 22px rgba(0, 0, 0, 0.5),
-    0 0 18px rgba(232, 160, 32, 0.12);
+    0 0 18px rgba(207, 154, 63, 0.12);
   color: var(--moss-text);
 }
 div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="avatar"] {
@@ -320,7 +323,7 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="avatar"
   height: 26px;
   border-radius: 50%;
   border: 1px solid var(--moss-amber-d);
-  box-shadow: 0 0 10px rgba(232, 160, 32, 0.22);
+  box-shadow: 0 0 10px rgba(207, 154, 63, 0.22);
   flex: none;
 }
 div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"] {
@@ -337,9 +340,9 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   display: inline-block;
   margin-right: 6px;
   padding: 0 5px;
-  border: 1px solid rgba(232, 160, 32, 0.45);
+  border: 1px solid rgba(207, 154, 63, 0.45);
   border-radius: 3px;
-  background: rgba(232, 160, 32, 0.15);
+  background: rgba(207, 154, 63, 0.15);
   color: var(--moss-amber-b);
   font-size: 9px;
   line-height: 1.6;
@@ -486,9 +489,9 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   bottom: calc(100% + 10px);
   width: 208px;
   padding: 0;
-  border: 1px solid rgba(232, 160, 32, 0.4);
+  border: 1px solid rgba(207, 154, 63, 0.4);
   background: linear-gradient(180deg, #100c06, #080604);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 34px rgba(232, 160, 32, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 34px rgba(207, 154, 63, 0.12);
   opacity: 0;
   transform: translateY(7px) scale(0.98);
   transform-origin: right bottom;
@@ -544,14 +547,14 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   align-items: baseline;
   gap: 14px;
   padding: 7px 0;
-  border-bottom: 1px dotted rgba(232, 160, 32, 0.16);
+  border-bottom: 1px dotted rgba(207, 154, 63, 0.16);
   font-size: 11.5px;
   font-variant-numeric: tabular-nums;
 }
 #moss-balance .mb-row:last-child { border-bottom: none; }
 #moss-balance .mb-row .k { color: var(--moss-text-faint); letter-spacing: 0.08em; font-size: 10.5px; }
 #moss-balance .mb-row .v { color: var(--moss-text); }
-#moss-balance .mb-row .v.strong { color: var(--moss-amber-b); font-size: 13px; text-shadow: 0 0 10px rgba(232, 160, 32, 0.35); }
+#moss-balance .mb-row .v.strong { color: var(--moss-amber-b); font-size: 13px; text-shadow: 0 0 10px rgba(207, 154, 63, 0.35); }
 #moss-balance .mb-actions {
   display: flex;
   gap: 8px;
@@ -572,10 +575,10 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   transition: all 0.15s ease;
 }
 #moss-balance .mb-btn:hover {
-  background: rgba(232, 160, 32, 0.16);
+  background: rgba(207, 154, 63, 0.16);
   border-color: var(--moss-amber);
   color: var(--moss-amber-b);
-  box-shadow: 0 0 14px rgba(232, 160, 32, 0.22);
+  box-shadow: 0 0 14px rgba(207, 154, 63, 0.22);
 }
 #moss-balance .mb-btn.primary {
   background: linear-gradient(180deg, #3a2408, #1a1005);
@@ -583,7 +586,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   color: var(--moss-amber-b);
 }
 
-/* skin settings row inside the popover: the only switch the skin owns. */
+/* skin settings row inside the popover. The switch itself is the chip's engine
+   glyph, so this row only labels it and points at it. */
 #moss-balance .mb-setting {
   display: flex;
   align-items: center;
@@ -591,46 +595,48 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   gap: 10px;
   margin: 4px 0 2px;
   padding: 8px 2px 6px;
-  border-top: 1px solid rgba(232, 160, 32, 0.14);
+  border-top: 1px solid rgba(207, 154, 63, 0.14);
   font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--moss-text-dim);
 }
 #moss-balance .mb-setting .k { color: var(--moss-amber); }
-#moss-balance .mb-switch {
-  position: relative;
-  width: 36px;
-  height: 16px;
-  padding: 0;
+#moss-balance .mb-hint {
   flex: none;
-  cursor: pointer;
-  border: 1px solid rgba(232, 160, 32, 0.4);
-  border-radius: 9px;
-  background: rgba(0, 0, 0, 0.45);
-  transition: background 0.18s ease, border-color 0.18s ease;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--moss-text-faint);
+  border-bottom: 1px dotted rgba(207, 154, 63, 0.35);
+  padding-bottom: 1px;
 }
-#moss-balance .mb-switch i {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
+
+/* the engine glyph doubles as the tracking switch */
+#moss-balance .mb-engine-btn {
+  display: inline-flex;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  background: #6b5a3a;
-  transition: transform 0.18s ease, background 0.18s ease;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
-#moss-balance .mb-switch[aria-checked="true"] {
-  border-color: var(--moss-amber);
-  background: rgba(232, 160, 32, 0.2);
+#moss-balance .mb-engine {
+  color: #7fe8dd;
+  transition: color 0.2s ease;
 }
-#moss-balance .mb-switch[aria-checked="true"] i {
-  transform: translateX(18px);
-  background: var(--moss-amber-b);
-  box-shadow: 0 0 8px rgba(232, 160, 32, 0.65);
+#moss-balance[data-track="on"] .mb-engine {
+  color: var(--moss-amber-b);
+  filter: drop-shadow(0 0 5px rgba(207, 154, 63, 0.55));
 }
-#moss-balance .mb-switch:focus-visible {
+#moss-balance[data-track="on"] .mb-engine-btn {
+  background: rgba(207, 154, 63, 0.12);
+}
+#moss-balance .mb-engine-btn:hover { background: rgba(255, 255, 255, 0.06); }
+#moss-balance .mb-engine-btn:focus-visible {
   outline: 1px solid var(--moss-amber);
-  outline-offset: 2px;
+  outline-offset: 1px;
 }
 
 /* ============================================================================
@@ -728,7 +734,7 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   font-size: clamp(7px, 0.9vmin, 11px);
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(232, 160, 32, 0.5);
+  color: rgba(207, 154, 63, 0.5);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
 }
@@ -780,8 +786,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
 
 /* ---------- top bar: amber strips ---------- */
 [data-conversation-region] > div:first-child {
-  background: linear-gradient(180deg, rgba(232, 160, 32, 0.1), transparent) !important;
-  border-bottom: 1px solid rgba(232, 160, 32, 0.22) !important;
+  background: linear-gradient(180deg, rgba(207, 154, 63, 0.1), transparent) !important;
+  border-bottom: 1px solid rgba(207, 154, 63, 0.22) !important;
 }
 
 /* ---------- composer ---------- */
@@ -791,8 +797,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
 [data-composer-dock] > div {
   /* lifted off near-black: this is the surface the user reads and types into */
   background: linear-gradient(180deg, #18222d, #111923) !important;
-  border: 1px solid rgba(232, 160, 32, 0.34) !important;
-  box-shadow: inset 0 0 30px rgba(232, 160, 32, 0.05), 0 14px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(207, 154, 63, 0.34) !important;
+  box-shadow: inset 0 0 30px rgba(207, 154, 63, 0.05), 0 14px 40px rgba(0, 0, 0, 0.45);
 }
 [data-composer-input] {
   color: var(--moss-text) !important;
@@ -810,8 +816,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
 /* ---------- chat bubbles: terminal paper ---------- */
 [data-conversation-content] [class*="chatBubble"] {
   background: rgba(24, 32, 42, 0.9) !important;
-  border: 1px solid rgba(232, 160, 32, 0.2) !important;
-  box-shadow: inset 0 0 24px rgba(232, 160, 32, 0.04);
+  border: 1px solid rgba(207, 154, 63, 0.2) !important;
+  box-shadow: inset 0 0 24px rgba(207, 154, 63, 0.04);
   color: var(--moss-text) !important;
 }
 [data-conversation-content] [class*="chatBubble"] code {

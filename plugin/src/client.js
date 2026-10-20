@@ -329,14 +329,17 @@ function mountLens(disposers, isDead) {
 /* Reads account/balance from ctx.remote.account (same source as the   */
 /* settings panel); polls on an interval and on window focus.          */
 /* ------------------------------------------------------------------ */
+/* Engine glyph, drawn with currentColor so the chip can tint it: amber while the
+   pointer tracking is on, the stock teal while it is off. It doubles as the
+   tracking switch (click / Enter / Space). */
 const ENGINE_SVG = `
   <svg class="mb-engine" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <circle cx="20" cy="13" r="9" fill="#0e2a30" stroke="#7fe8dd" stroke-width="1.6"/>
-    <path d="M11 13h18" stroke="#7fe8dd" stroke-opacity="0.5" stroke-width="1"/>
-    <path d="M20 4a9 9 0 0 1 0 18M20 4a9 9 0 0 0 0 18" stroke="#7fe8dd" stroke-opacity="0.35" fill="none"/>
-    <path d="M13 23h14l-2.5 6h-9z" fill="#18303a" stroke="#7fe8dd" stroke-width="1.2"/>
-    <path d="M16.5 29.5q3.5 4.5 3.5 9.5q0-5 3.5-9.5z" fill="#4fd1c5" fill-opacity="0.9"/>
-    <path d="M18.7 29.5q1.3 3 1.3 6q0-3 1.3-6z" fill="#e8ffff"/>
+    <circle cx="20" cy="13" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M11 13h18" stroke="currentColor" stroke-opacity="0.5" stroke-width="1"/>
+    <path d="M20 4a9 9 0 0 1 0 18M20 4a9 9 0 0 0 0 18" stroke="currentColor" stroke-opacity="0.35" fill="none"/>
+    <path d="M13 23h14l-2.5 6h-9z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+    <path d="M16.5 29.5q3.5 4.5 3.5 9.5q0-5 3.5-9.5z" fill="currentColor" fill-opacity="0.9"/>
+    <path d="M18.7 29.5q1.3 3 1.3 6q0-3 1.3-6z" fill="#0c1218" fill-opacity="0.9"/>
   </svg>`
 
 function mountBalance(ctx, disposers, isDead) {
@@ -348,7 +351,8 @@ function mountBalance(ctx, disposers, isDead) {
   box.innerHTML = `
     <div class="mb-chip" role="button" tabindex="0" aria-label="账户余额">
       <span class="mb-burn" aria-hidden="true"><i></i></span>
-      ${ENGINE_SVG}
+      <span class="mb-engine-btn" role="switch" aria-checked="true" tabindex="0"
+            aria-label="MOSS 追踪开关" title="MOSS 追踪开关">${ENGINE_SVG}</span>
       <div class="mb-meta">
         <span class="mb-caption">PLANET ENGINE · 余额</span>
         <span class="mb-total"><span class="unit">¥</span><span class="mb-num">--.--</span></span>
@@ -365,7 +369,7 @@ function mountBalance(ctx, disposers, isDead) {
       </div>
       <div class="mb-setting">
         <span class="k">MOSS 追踪</span>
-        <button type="button" class="mb-switch" role="switch" aria-checked="true" aria-label="MOSS 瞳孔跟随鼠标"><i></i></button>
+        <span class="mb-hint">开关：右下角图标</span>
       </div>
       <div class="mb-actions">
         <button type="button" class="mb-btn mb-usage">查看用量</button>
@@ -457,16 +461,28 @@ function mountBalance(ctx, disposers, isDead) {
     if (links.topUpUrl && typeof window !== 'undefined') window.open(links.topUpUrl, '_blank')
   })
 
-  // Skin setting: pause/resume pointer tracking of the MOSS pupil.
-  const trackSwitch = box.querySelector('.mb-switch')
-  if (trackSwitch) {
-    trackSwitch.setAttribute('aria-checked', readTrackingPref() ? 'true' : 'false')
-    trackSwitch.addEventListener('click', (e) => {
+  /* ---- skin setting: the chip's engine glyph IS the tracking switch -------
+     Amber while the pupil follows the pointer, stock teal while it is parked.
+     Clicking it must not bubble into the chip's own popover toggle. */
+  const trackToggle = box.querySelector('.mb-engine-btn')
+  const setTracked = (on) => {
+    if (box.setAttribute) box.setAttribute('data-track', on ? 'on' : 'off')
+    if (trackToggle && trackToggle.setAttribute) {
+      trackToggle.setAttribute('aria-checked', on ? 'true' : 'false')
+    }
+    writeTrackingPref(on)
+    if (lensSetTracking) lensSetTracking(on)
+  }
+  if (trackToggle) {
+    setTracked(readTrackingPref())
+    const flip = (e) => {
       if (e && typeof e.stopPropagation === 'function') e.stopPropagation()
-      const next = trackSwitch.getAttribute('aria-checked') !== 'true'
-      trackSwitch.setAttribute('aria-checked', next ? 'true' : 'false')
-      writeTrackingPref(next)
-      if (lensSetTracking) lensSetTracking(next)
+      if (e && typeof e.preventDefault === 'function') e.preventDefault()
+      setTracked(box.getAttribute('data-track') !== 'on')
+    }
+    trackToggle.addEventListener('click', flip)
+    trackToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') flip(e)
     })
   }
 
