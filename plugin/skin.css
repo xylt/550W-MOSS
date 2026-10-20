@@ -700,12 +700,14 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
 #moss-mark .wm {
   /* Bahnschrift, not Consolas: Consolas draws a slashed zero, and once the "0"
      is painted red the slash reads as a broken glyph. */
-  font-family: "Bahnschrift", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: "Bahnschrift", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif !important;
   font-size: clamp(26px, 4.4vmin, 54px);
   font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1;
-  color: rgba(214, 232, 255, 0.3);
+  /* !important: the host paints body text with the amber label token and a few
+     of its own rules reach this block; without it the wordmark came out amber. */
+  color: rgba(214, 232, 255, 0.3) !important;
   /* the lens glow sits right behind this block; a dark contact shadow keeps the
      glyphs readable there instead of dissolving into the red. */
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 26px rgba(255, 45, 45, 0.2);
@@ -714,7 +716,7 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
    rendered at a fraction of the size, so it is a span whose inherited metrics
    are pinned here as well as inline in the markup. */
 #moss-mark .wm .wm-zero {
-  color: rgba(255, 45, 45, 0.62);
+  color: rgba(255, 45, 45, 0.62) !important;
   font-size: inherit;
   font-weight: inherit;
   font-family: inherit;
@@ -735,9 +737,10 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
    dot ring on the black cradle, and the radar sweep stay fixed. The brief was
    "黑圆红点固定不动" — that is .m-rot-d (dots) plus the disc itself. */
 .m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep { transform-origin: 250px 250px; }
+.m-rot-a { animation: moss-spin 42s linear infinite; }
 .m-rot-b { animation: moss-spin-rev 24s linear infinite; }
 .m-rot-c { animation: moss-spin 56s linear infinite; }
-.m-rot-a, .m-rot-d, .m-sweep { animation: none; }
+.m-rot-d, .m-sweep { animation: none; }
 .m-iris { transform-origin: 250px 250px; animation: moss-breathe 4.2s ease-in-out infinite; }
 /* Pointer offset lives on its own wrapper, in viewBox user units, so it composes
    with — instead of overwriting — the breathing scale on .m-iris. */
@@ -765,9 +768,13 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   height: 32px;
   background: #0e131a !important;
 }
-[data-windows-titlebar] * {
-  color: var(--moss-text-dim) !important;
-  font-family: Consolas, monospace !important;
+/* Direct children only. The desktop build puts data-windows-titlebar on a root
+   element, so the old `[data-windows-titlebar] *` rule repainted EVERY node —
+   including the 550W watermark (amber, Consolas) and the red zero (which dropped
+   to 11px). The three skin layers appended to <body> are excluded explicitly. */
+[data-windows-titlebar] > *:not(#moss-mark):not(#moss-lens-wrap):not(#moss-balance) {
+  color: var(--moss-text-dim);
+  font-family: Consolas, monospace;
   font-size: 11px;
 }
 
