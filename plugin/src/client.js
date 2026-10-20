@@ -369,7 +369,7 @@ function mountBalance(ctx, disposers, isDead) {
       </div>
       <div class="mb-setting">
         <span class="k">MOSS 追踪</span>
-        <span class="mb-hint">开关：右下角图标</span>
+        <span class="mb-hint">开关：下方小人图标</span>
       </div>
       <div class="mb-actions">
         <button type="button" class="mb-btn mb-usage">查看用量</button>
