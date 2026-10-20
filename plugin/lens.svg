@@ -1,0 +1,94 @@
+<svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="moss-core-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd6d6" stop-opacity="0.95" />
+      <stop offset="30%" stop-color="#ff5a5a" stop-opacity="0.85" />
+      <stop offset="65%" stop-color="#e02020" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#3a0505" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="moss-halo-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#ff2d2d" stop-opacity="0" />
+      <stop offset="84%" stop-color="#ff2d2d" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ff2d2d" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="moss-metal" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#241213" />
+      <stop offset="60%" stop-color="#13090a" />
+      <stop offset="100%" stop-color="#080405" />
+    </radialGradient>
+    <filter id="moss-soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" />
+    </filter>
+  </defs>
+
+  <!-- ambient halo -->
+  <circle cx="250" cy="250" r="238" fill="url(#moss-halo-grad)" class="m-glow" />
+
+  <!-- outermost micrometer ring, slow drift -->
+  <g class="m-rot-c">
+    <circle cx="250" cy="250" r="234" stroke="#8a0b0b" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="1 11" />
+    <circle cx="250" cy="250" r="226" stroke="#ff2d2d" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="46 210" />
+  </g>
+
+  <!-- armored housing ring, counter-rotating segments -->
+  <g class="m-rot-b">
+    <circle cx="250" cy="250" r="206" stroke="#ff2d2d" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="62 26" />
+    <circle cx="250" cy="250" r="196" stroke="#ff2d2d" stroke-opacity="0.1" stroke-width="12" stroke-dasharray="14 40" />
+  </g>
+
+  <!-- rotating tick ring -->
+  <g class="m-rot-a">
+    <circle cx="250" cy="250" r="172" stroke="#ff2d2d" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="96 18 6 18" />
+    <circle cx="250" cy="250" r="162" stroke="#ff2d2d" stroke-opacity="0.18" stroke-width="22" stroke-dasharray="18 30" />
+  </g>
+
+  <!-- radar sweep -->
+  <g class="m-sweep">
+    <path d="M250 250 L250 68 A182 182 0 0 1 386 132 Z" fill="#ff2d2d" fill-opacity="0.04" />
+    <line x1="250" y1="250" x2="250" y2="78" stroke="#ff2d2d" stroke-opacity="0.25" stroke-width="1" />
+  </g>
+
+  <!-- fixed gimbal cradle -->
+  <circle cx="250" cy="250" r="138" fill="url(#moss-metal)" stroke="#ff2d2d" stroke-opacity="0.24" stroke-width="1" />
+  <g class="m-rot-d">
+    <circle cx="250" cy="250" r="126" stroke="#ff2d2d" stroke-opacity="0.4" stroke-width="4" stroke-dasharray="4 13" />
+  </g>
+  <circle cx="250" cy="250" r="112" stroke="#ff2d2d" stroke-opacity="0.15" stroke-width="1" fill="none" />
+
+  <!-- bolt heads on the cradle -->
+  <g fill="#ff2d2d" fill-opacity="0.35">
+    <circle cx="250" cy="112" r="2.6" />
+    <circle cx="250" cy="388" r="2.6" />
+    <circle cx="112" cy="250" r="2.6" />
+    <circle cx="388" cy="250" r="2.6" />
+  </g>
+
+  <!-- breathing iris / red pupil.
+       The eye is wrapped in a tracking layer: client.js translates
+       .m-iris-track so the pupil follows the pointer, while the breathing
+       scale stays on .m-iris (the inner group) and never fights it. -->
+  <g class="m-iris-track">
+  <g class="m-iris">
+    <circle cx="250" cy="250" r="84" fill="url(#moss-core-grad)" filter="url(#moss-soft)" />
+    <circle cx="250" cy="250" r="56" fill="url(#moss-core-grad)" />
+    <circle cx="250" cy="250" r="56" stroke="#ffb3b3" stroke-opacity="0.4" stroke-width="1" />
+    <!-- aperture blade arcs -->
+    <path d="M250 194 A56 56 0 0 1 306 250" stroke="#2a0505" stroke-opacity="0.7" stroke-width="9" fill="none" />
+    <path d="M250 306 A56 56 0 0 1 194 250" stroke="#2a0505" stroke-opacity="0.7" stroke-width="9" fill="none" />
+    <path d="M194 222 A56 56 0 0 1 250 194" stroke="#2a0505" stroke-opacity="0.45" stroke-width="6" fill="none" />
+    <path d="M306 278 A56 56 0 0 1 250 306" stroke="#2a0505" stroke-opacity="0.45" stroke-width="6" fill="none" />
+    <circle cx="250" cy="250" r="17" fill="#ffd9d9" class="m-core" filter="url(#moss-soft)" />
+    <circle cx="250" cy="250" r="15" fill="#fff2f2" class="m-core" />
+    <!-- glass reflection -->
+    <ellipse cx="234" cy="232" rx="11" ry="6" fill="#ffffff" fill-opacity="0.3" transform="rotate(-28 234 232)" />
+  </g>
+  </g>
+
+  <!-- cardinal targeting ticks -->
+  <g stroke="#ff2d2d" stroke-opacity="0.2">
+    <line x1="250" y1="20" x2="250" y2="54" />
+    <line x1="250" y1="446" x2="250" y2="480" />
+    <line x1="20" y1="250" x2="54" y2="250" />
+    <line x1="446" y1="250" x2="480" y2="250" />
+  </g>
+</svg>

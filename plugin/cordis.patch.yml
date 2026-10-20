@@ -1,0 +1,8 @@
+# Bundle patch layer for 550W-MOSS.
+#
+# This makes the package a PROFILE LAYER rather than an inert dependency: the
+# row mounts the host half, and package.json's `dsh.client` block is what gets
+# the browser half served and loaded.
+- insert:
+    - id: skin-550w-moss
+      name: 550w-moss

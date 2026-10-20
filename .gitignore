@@ -1,0 +1,19 @@
+# 构建/分发产物
+*.tgz
+*.zip
+
+# 依赖
+node_modules/
+vendor/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志与临时文件
+*.log
+*.tmp
+.dsh-shot-*

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>550W-MOSS · harness</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { background: #101c2a; font-family: Consolas, monospace; overflow: hidden; }
+  #moss-harness-note {
+    position: fixed; left: 24px; top: 20px; z-index: 9;
+    font: 12px/1.6 Consolas, monospace; color: #8fa6bf; letter-spacing: .08em;
+  }
+</style>
+</head>
+<body>
+<!-- Bare-page harness: loads the built bundle without the DSH shell, so the
+     lens, the watermark and the chip can be inspected (and screenshotted)
+     without any account data in frame. -->
+<div id="moss-harness-note">
+  harness · lens + chip only<br />
+  move pointer → pupil tracks · click switch → tracking off
+</div>
+<script>
+  // Stand-in for the DSH client module loader: capture the entry, call its
+  // factory, then hand it a stub ctx so apply() mounts the skin.
+  window.__ModuleLoader__ = {
+    entries: [],
+    load(entry) { this.entries.push(entry) },
+  }
+</script>
+<script src="../lib/client.js"></script>
+<script>
+  (async () => {
+    const entry = window.__ModuleLoader__.entries[0]
+    const exportsObj = entry.factory(() => ({}))
+    const ctx = {
+      effect(fn) { window.__harnessDispose = fn() },
+      remote: {
+        account: {
+          async getState() {
+            return { ok: true, value: { status: 'credential-stored', links: { usageUrl: '', topUpUrl: '' } } }
+          },
+          async getBalance() {
+            return {
+              ok: true,
+              value: {
+                status: 'ready',
+                value: [{ currency: 'CNY', balance: '20.00' }],
+                bonusWallets: [{ currency: 'CNY', balance: '0.00' }],
+              },
+            }
+          },
+        },
+      },
+    }
+    exportsObj.apply(ctx)
+    window.__harnessReady = true
+  })()
+</script>
+</body>
+</html>

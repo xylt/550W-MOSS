@@ -1,0 +1,818 @@
+/* ============================================================================
+   MOSS-550C skin · v2 · MOSS-550C-skin@0.2.1-rc.2
+   ----------------------------------------------------------------------------
+   550C amber CRT over the DSH client shell.
+   Layout pass: topbar / sidebar workspace list (region 1) / user chip (2) /
+   balance widget (3) / MOSS lens background (4).
+   ========================================================================== */
+
+/* Built-in DSW palette override (required by build.mjs; recolors stock UI) */
+body[data-dsh-skin-moss-550c] {
+  /* Second lift: #05070c → #0a1119 → #101c2a. The shell still read as one dark
+     slab after the first pass; this separates sidebar / transcript / composer. */
+  --dsw-alias-bg-base: #101c2a;
+  --dsw-specific-sidebar-fill: #12100b;
+  --dsw-alias-brand-primary: #e8a020;
+  --dsw-alias-label-primary: #ffc043;
+}
+
+/* Height-chain guard: when the dark theme attr is applied directly (no
+   setTheme round-trip), the app's 100% chain can collapse to titlebar
+   height (32px) and leave the shell blank. Force the chain full height. */
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
+}
+
+:root {
+  --moss-amber: #e8a020;
+  --moss-amber-b: #ffc043;
+  --moss-amber-d: #8a5e10;
+  --moss-amber-fade: rgba(232, 160, 32, 0.35);
+  --moss-text: #e6d2a8;
+  /* second lift: dim/faint still read as "off" against the lifted base */
+  --moss-text-dim: #c3a874;
+  --moss-text-faint: #957f52;
+  --moss-red: #e05030;
+  --moss-red-b: #ff7050;
+  --moss-red-core: #ff2d2d;
+  --moss-green: #b8c840;
+  --moss-cyan: #4fd1c5;
+  --moss-bg: #0c1218;
+  --moss-panel: #16202b;
+}
+
+/* ============================================================================
+   Global amber CRT grain (kept off interactive layers)
+   ========================================================================== */
+html body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(232, 160, 32, 0.03) 0,
+    rgba(232, 160, 32, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+html body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  /* Corner falloff (0.85 → 0.42 → 0.26) plus a soft blood-red pressure field
+     centred on the lens, so the glow reads as something looming, not a decal. */
+  background:
+    radial-gradient(circle at var(--moss-cx, 50%) var(--moss-cy, 44%),
+      rgba(255, 44, 32, 0.07) 0%,
+      rgba(120, 12, 8, 0.05) 26%,
+      transparent 46%),
+    radial-gradient(ellipse at center, transparent 62%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+/* ============================================================================
+   区域 1 — 侧栏工作区列表：550C 开机动画 HUD 终端面板风格
+   ========================================================================== */
+
+/* section header = boot window title bar: LED + uppercase amber + tag right */
+div[class*="sidebarCol"] [class*="sectionHeader"] {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 10px 6px;
+  padding: 6px 9px;
+  background: linear-gradient(180deg, #161006, #0a0805);
+  border: 1px solid var(--moss-amber-d);
+  border-bottom: 1px dotted var(--moss-amber-fade);
+  position: relative;
+}
+div[class*="sidebarCol"] [class*="sectionHeader"]::before,
+div[class*="sidebarCol"] [class*="sectionHeader"]::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-color: var(--moss-amber);
+  pointer-events: none;
+}
+div[class*="sidebarCol"] [class*="sectionHeader"]::before {
+  top: -1px; left: -1px;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+}
+div[class*="sidebarCol"] [class*="sectionHeader"]::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+}
+div[class*="sidebarCol"] [class*="sectionHeader"] [class*="sectionLabel"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--moss-amber);
+  font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(232, 160, 32, 0.35);
+}
+/* green online LED before the label */
+div[class*="sidebarCol"] [class*="sectionHeader"] [class*="sectionLabel"]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--moss-green);
+  box-shadow: 0 0 6px var(--moss-green);
+  animation: moss-led-pulse 1.6s ease-in-out infinite;
+  flex: none;
+}
+
+/* group divider = boot `.sect` dotted rule */
+div[class*="sidebarCol"] [class*="groupSection"] {
+  margin: 12px 14px 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px dotted var(--moss-amber-fade);
+  color: var(--moss-amber-d);
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* folder / project row */
+div[class*="sidebarCol"] [class*="projectRow"] {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 1px 8px;
+  padding: 7px 9px;
+  color: var(--moss-text-dim);
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 11.5px;
+  border-left: 2px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+div[class*="sidebarCol"] [class*="projectRow"]:hover {
+  background: rgba(232, 160, 32, 0.08);
+  color: var(--moss-text);
+}
+div[class*="sidebarCol"] [class*="projectRow"] [class*="folder"],
+div[class*="sidebarCol"] [class*="projectRow"] svg {
+  color: var(--moss-amber-d) !important;
+  flex: none;
+}
+div[class*="sidebarCol"] [class*="projectRow"]:hover [class*="folder"],
+div[class*="sidebarCol"] [class*="projectRow"]:hover svg {
+  color: var(--moss-amber) !important;
+}
+div[class*="sidebarCol"] [class*="projectRow"] [class*="arrow"] {
+  margin-left: auto;
+  color: var(--moss-text-faint);
+  font-size: 10px;
+}
+
+/* session row = boot `.dt` label-left / value-right terminal line */
+div[class*="sidebarCol"] [class*="sessionRow"] {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 1px 8px;
+  padding: 7px 9px;
+  color: var(--moss-text-dim);
+  font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+  font-size: 11.5px;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+div[class*="sidebarCol"] [class*="sessionRow"]:hover {
+  background: rgba(232, 160, 32, 0.08);
+  color: var(--moss-text);
+}
+div[class*="sidebarCol"] [class*="sessionRow"] [class*="title"] {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+div[class*="sidebarCol"] [class*="sessionRow"] [class*="time"],
+div[class*="sidebarCol"] [class*="sessionRow"] [class*="meta"] {
+  margin-left: auto;
+  flex: none;
+  color: var(--moss-text-faint);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+div[class*="sidebarCol"] [class*="sessionRow"] [class*="dot"] {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--moss-text-faint);
+}
+/* active session = amber panel + left signal bar, like a CONNECTED row */
+div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"],
+div[class*="sidebarCol"] [class*="sessionRow"][aria-selected="true"],
+div[class*="sidebarCol"] [class*="sessionRow"].selected {
+  color: var(--moss-amber-b);
+  background: linear-gradient(90deg, rgba(232, 160, 32, 0.24), rgba(232, 160, 32, 0.05) 72%, transparent);
+  border-left: 3px solid var(--moss-amber);
+  box-shadow: inset 0 0 18px rgba(232, 160, 32, 0.08);
+}
+div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"] [class*="time"],
+div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"] [class*="meta"] {
+  color: var(--moss-amber);
+}
+div[class*="sidebarCol"] [class*="sessionRow"][class*="selected"] [class*="dot"] {
+  background: var(--moss-green);
+  box-shadow: 0 0 7px var(--moss-green);
+  animation: moss-led-pulse 1.6s ease-in-out infinite;
+}
+
+/* nav rows above the workspace list (插件 / 自动化任务) */
+div[class*="sidebarCol"] [class*="panelRow"] {
+  display: flex !important;
+  align-items: center;
+  gap: 9px;
+  margin: 1px 8px;
+  padding: 7px 9px;
+  color: var(--moss-text-dim);
+  font-family: Consolas, monospace;
+  font-size: 11.5px;
+  border-left: 2px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+div[class*="sidebarCol"] [class*="panelRow"]:hover {
+  background: rgba(232, 160, 32, 0.08);
+  color: var(--moss-amber-b);
+}
+
+/* search input inside the workspace panel */
+div[class*="sidebarCol"] input {
+  background: #0a0805 !important;
+  border: 1px solid var(--moss-amber-d) !important;
+  color: var(--moss-text) !important;
+  font-family: Consolas, monospace !important;
+  box-shadow: inset 0 0 18px rgba(232, 160, 32, 0.05);
+}
+div[class*="sidebarCol"] input::placeholder { color: var(--moss-text-faint) !important; }
+div[class*="sidebarCol"] input:focus {
+  border-color: var(--moss-amber) !important;
+  box-shadow: 0 0 0 1px rgba(232, 160, 32, 0.3), inset 0 0 18px rgba(232, 160, 32, 0.08);
+  outline: none !important;
+}
+
+@keyframes moss-led-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* ---------- 区域 1 — 左下角用户身份条：去框，只留头像 + 名字 ----------
+   The frosted-glass card is wanted — only the extra BORDER was, not the whole
+   surface. So: glass, glow and depth stay, the 1px amber frame is gone. */
+div[class*="sidebarCol"] [class*="footArea"] {
+  /* The foot wrapper sits at x=12 while 新会话 starts at x=14 and is 252 wide.
+     2px horizontal padding + border-box reproduces that exactly (measured:
+     newChat left 14 / width 252). */
+  padding: 5px 2px 9px;
+}
+div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"],
+div[class*="sidebarCol"] [class*="footArea"] button[class*="trigger"] {
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  /* no border: that was the second frame */
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(232, 160, 32, 0.15), rgba(232, 160, 32, 0.05));
+  -webkit-backdrop-filter: blur(9px) saturate(1.2);
+  backdrop-filter: blur(9px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 205, 120, 0.16),
+    inset 0 0 22px rgba(232, 160, 32, 0.05),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+  color: var(--moss-text);
+  font-family: Consolas, "Cascadia Mono", monospace;
+  transition: background 0.14s ease, box-shadow 0.14s ease, color 0.14s ease;
+}
+div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"]:hover {
+  background: linear-gradient(180deg, rgba(232, 160, 32, 0.2), rgba(232, 160, 32, 0.07));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 205, 120, 0.22),
+    inset 0 0 22px rgba(232, 160, 32, 0.08),
+    0 6px 22px rgba(0, 0, 0, 0.5),
+    0 0 18px rgba(232, 160, 32, 0.12);
+  color: var(--moss-text);
+}
+div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="avatar"] {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--moss-amber-d);
+  box-shadow: 0 0 10px rgba(232, 160, 32, 0.22);
+  flex: none;
+}
+div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"] {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+/* rank badge before the account name, drawn as a pseudo element so the host's
+   label markup stays untouched */
+div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]::before {
+  content: '高级驾驶员';
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  border: 1px solid rgba(232, 160, 32, 0.45);
+  border-radius: 3px;
+  background: rgba(232, 160, 32, 0.15);
+  color: var(--moss-amber-b);
+  font-size: 9px;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+/* ============================================================================
+   区域 3 — 流浪地球行星发动机余额组件（client.js 挂载）
+   ========================================================================== */
+#moss-balance {
+  position: fixed;
+  /* nudged up and in from 14/30 as requested */
+  right: 26px;
+  bottom: 46px;
+  z-index: 260;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+}
+#moss-balance .mb-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid rgba(79, 209, 197, 0.35);
+  background: linear-gradient(180deg, rgba(20, 42, 46, 0.72), rgba(8, 16, 20, 0.78));
+  -webkit-backdrop-filter: blur(10px) saturate(1.25);
+  backdrop-filter: blur(10px) saturate(1.25);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 255, 0.16),
+    inset 0 0 24px rgba(79, 209, 197, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  position: relative;
+}
+#moss-balance .mb-chip:hover {
+  border-color: var(--moss-cyan);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 255, 0.22),
+    inset 0 0 24px rgba(79, 209, 197, 0.1),
+    0 8px 26px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(79, 209, 197, 0.18);
+  transform: translateY(-1px);
+}
+
+/* ---------- live token burn (red) — fed by the app's own tok/s readout ------ */
+#moss-balance .mb-burn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 8px 8px 0 0;
+}
+#moss-balance .mb-burn i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(255, 45, 45, 0.1), var(--moss-red-core));
+  box-shadow: 0 0 8px rgba(255, 45, 45, 0.8);
+  transition: width 0.45s ease-out;
+}
+#moss-balance[data-burn="live"] .mb-burn i {
+  animation: mb-burn-scan 1.6s ease-in-out infinite;
+}
+@keyframes mb-burn-scan {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+#moss-balance .mb-engine {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+#moss-balance .mb-meta { display: flex; flex-direction: column; gap: 2px; }
+#moss-balance .mb-caption {
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(79, 209, 197, 0.75);
+  white-space: nowrap;
+}
+#moss-balance .mb-total {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #d8f6f2;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(79, 209, 197, 0.4);
+  white-space: nowrap;
+  line-height: 1.15;
+}
+#moss-balance .mb-total .unit { font-size: 9px; color: var(--moss-cyan); margin-right: 3px; }
+
+/* ---------- state line, which doubles as the live cost readout ----------
+   Sized so a full cost string fits: the figure replaces "ONLINE · LIVE" in
+   place, same line, same font, same box — the chip never resizes. */
+#moss-balance .mb-state {
+  font-size: 9.5px;
+  min-height: 12px;
+  color: var(--moss-text-faint);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* the live figure: red, glowing, pulsing */
+#moss-balance[data-cost="on"] .mb-state {
+  color: #ff4a3d;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 0 10px rgba(255, 45, 45, 0.95),
+    0 0 20px rgba(255, 45, 45, 0.4),
+    0 0 2px rgba(255, 140, 120, 0.95);
+  animation: mb-cost-pulse 1.5s ease-in-out infinite;
+}
+
+/* ---------- while a turn streams ---------- */
+#moss-balance[data-cost="on"] .mb-chip {
+  border-color: rgba(255, 45, 45, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(160, 240, 255, 0.16),
+    inset 0 0 24px rgba(255, 45, 45, 0.07),
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 18px rgba(255, 45, 45, 0.14);
+}
+@keyframes mb-cost-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.74; }
+}
+
+/* popover panel — opens ABOVE the chip (as requested), right-aligned to it */
+#moss-balance .mb-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: 208px;
+  padding: 0;
+  border: 1px solid rgba(232, 160, 32, 0.4);
+  background: linear-gradient(180deg, #100c06, #080604);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.78), 0 0 34px rgba(232, 160, 32, 0.12);
+  opacity: 0;
+  transform: translateY(7px) scale(0.98);
+  transform-origin: right bottom;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  overflow: hidden;
+}
+#moss-balance.open .mb-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+#moss-balance .mb-panel::before,
+#moss-balance .mb-panel::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+}
+#moss-balance .mb-panel::before {
+  top: -1px; left: -1px;
+  border-top: 1.5px solid var(--moss-amber);
+  border-left: 1.5px solid var(--moss-amber);
+}
+#moss-balance .mb-panel::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 1.5px solid var(--moss-amber);
+  border-right: 1.5px solid var(--moss-amber);
+}
+#moss-balance .mb-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #1a1208, #0e0a06);
+  border-bottom: 1px solid var(--moss-amber-d);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--moss-amber);
+}
+#moss-balance .mb-panel-head .led {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--moss-green);
+  box-shadow: 0 0 6px var(--moss-green);
+  animation: moss-led-pulse 1.6s ease-in-out infinite;
+}
+#moss-balance .mb-rows { padding: 8px 12px 4px; }
+#moss-balance .mb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  padding: 7px 0;
+  border-bottom: 1px dotted rgba(232, 160, 32, 0.16);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+#moss-balance .mb-row:last-child { border-bottom: none; }
+#moss-balance .mb-row .k { color: var(--moss-text-faint); letter-spacing: 0.08em; font-size: 10.5px; }
+#moss-balance .mb-row .v { color: var(--moss-text); }
+#moss-balance .mb-row .v.strong { color: var(--moss-amber-b); font-size: 13px; text-shadow: 0 0 10px rgba(232, 160, 32, 0.35); }
+#moss-balance .mb-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px 12px;
+}
+#moss-balance .mb-btn {
+  flex: 1;
+  padding: 7px 0;
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moss-amber);
+  background: linear-gradient(180deg, #1a1208, #0a0805);
+  border: 1px solid var(--moss-amber-d);
+  transition: all 0.15s ease;
+}
+#moss-balance .mb-btn:hover {
+  background: rgba(232, 160, 32, 0.16);
+  border-color: var(--moss-amber);
+  color: var(--moss-amber-b);
+  box-shadow: 0 0 14px rgba(232, 160, 32, 0.22);
+}
+#moss-balance .mb-btn.primary {
+  background: linear-gradient(180deg, #3a2408, #1a1005);
+  border-color: var(--moss-amber);
+  color: var(--moss-amber-b);
+}
+
+/* skin settings row inside the popover: the only switch the skin owns. */
+#moss-balance .mb-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px 0 2px;
+  padding: 8px 2px 6px;
+  border-top: 1px solid rgba(232, 160, 32, 0.14);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--moss-text-dim);
+}
+#moss-balance .mb-setting .k { color: var(--moss-amber); }
+#moss-balance .mb-switch {
+  position: relative;
+  width: 36px;
+  height: 16px;
+  padding: 0;
+  flex: none;
+  cursor: pointer;
+  border: 1px solid rgba(232, 160, 32, 0.4);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.45);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+#moss-balance .mb-switch i {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #6b5a3a;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+#moss-balance .mb-switch[aria-checked="true"] {
+  border-color: var(--moss-amber);
+  background: rgba(232, 160, 32, 0.2);
+}
+#moss-balance .mb-switch[aria-checked="true"] i {
+  transform: translateX(18px);
+  background: var(--moss-amber-b);
+  box-shadow: 0 0 8px rgba(232, 160, 32, 0.65);
+}
+#moss-balance .mb-switch:focus-visible {
+  outline: 1px solid var(--moss-amber);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   区域 4 — MOSS 镜头背景：内容区居中，随侧栏开合联动平移
+   （--moss-cx / --moss-cy 由 client.js 按内容区中心写入）
+   ========================================================================== */
+#moss-lens-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  /* Bigger and denser than the first pass: the brief was "more oppressive", so
+     it goes from ~32vmin decoration to ~46vmin presence. */
+  width: clamp(380px, 46vmin, 660px);
+  /* Position through transform only: animating left/top relayouts a fixed
+     element every frame while the sidebar width animates. */
+  transform: translate3d(var(--moss-cx, 50vw), var(--moss-cy, 46vh), 0) translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.3, 1);
+  opacity: 0.92;
+  filter: saturate(1.18) contrast(1.06);
+  will-change: transform;
+}
+/* blood-red pressure halo bleeding past the rings.
+   Opacity-only on purpose: an animated scale here (and the removed `moss-loom`
+   whole-lens scale) stacked on top of the positioning translate, and the
+   transform-origin offset made the lens appear to sway left/right. */
+#moss-lens-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -24%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle,
+      rgba(255, 38, 28, 0.22) 0%,
+      rgba(150, 6, 4, 0.16) 40%,
+      rgba(70, 0, 0, 0.07) 60%,
+      transparent 74%);
+  filter: blur(30px);
+  z-index: -1;
+  animation: moss-pressure 9s ease-in-out infinite;
+}
+@keyframes moss-pressure {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+#moss-lens-wrap svg { width: 100%; height: auto; display: block; }
+
+/* ---------- 550W watermark under the composer ------------------------------
+   Y comes from client.js as --moss-mark-y (composer bottom + 14px), so the big
+   glyphs sit in empty space instead of behind the composer card. */
+#moss-mark {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate3d(var(--moss-cx, 50vw), var(--moss-mark-y, 74vh), 0) translate(-50%, 0);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.3, 1);
+  will-change: transform;
+}
+#moss-mark .wm {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: clamp(26px, 4.4vmin, 54px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: rgba(214, 232, 255, 0.16);
+  text-shadow: 0 0 26px rgba(255, 45, 45, 0.16);
+}
+#moss-mark .wm b {
+  color: rgba(255, 45, 45, 0.45);
+  font-weight: 700;
+}
+#moss-mark .wm-sub {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: clamp(7px, 0.9vmin, 11px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(232, 160, 32, 0.34);
+  white-space: nowrap;
+}
+
+/* Chassis is frozen: the black cradle and its red dot rings hold still (the
+   brief was "黑圆红点固定不动"). Only the iris breathes and tracks the pointer,
+   so no ring animation is left running. */
+.m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep {
+  transform-origin: 250px 250px;
+  animation: none;
+}
+.m-iris { transform-origin: 250px 250px; animation: moss-breathe 4.2s ease-in-out infinite; }
+/* Pointer offset lives on its own wrapper, in viewBox user units, so it composes
+   with — instead of overwriting — the breathing scale on .m-iris. */
+.m-iris-track { transform: translate(0, 0); will-change: transform; }
+.m-core { animation: moss-led-pulse 2.4s ease-in-out infinite; }
+.m-glow { animation: moss-halo 5s ease-in-out infinite; }
+
+@keyframes moss-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.11); }
+}
+@keyframes moss-halo {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ============================================================================
+   Existing passes retained: titlebar / composer / chat
+   ========================================================================== */
+
+/* ---------- window chrome ---------- */
+[data-windows-titlebar] {
+  height: 32px;
+  background: #0e131a !important;
+}
+[data-windows-titlebar] * {
+  color: var(--moss-text-dim) !important;
+  font-family: Consolas, monospace !important;
+  font-size: 11px;
+}
+
+/* ---------- top bar: amber strips ---------- */
+[data-conversation-region] > div:first-child {
+  background: linear-gradient(180deg, rgba(232, 160, 32, 0.1), transparent) !important;
+  border-bottom: 1px solid rgba(232, 160, 32, 0.22) !important;
+}
+
+/* ---------- composer ---------- */
+[data-composer-seat] {
+  position: relative;
+}
+[data-composer-dock] > div {
+  /* lifted off near-black: this is the surface the user reads and types into */
+  background: linear-gradient(180deg, #18222d, #111923) !important;
+  border: 1px solid rgba(232, 160, 32, 0.34) !important;
+  box-shadow: inset 0 0 30px rgba(232, 160, 32, 0.05), 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+[data-composer-input] {
+  color: var(--moss-text) !important;
+  caret-color: var(--moss-amber) !important;
+  font-family: Consolas, "Cascadia Mono", "Courier New", monospace !important;
+  /* was inheriting the 14px shell size; the composer is the primary target */
+  font-size: 15.5px !important;
+  line-height: 1.6 !important;
+}
+[data-composer-input]::placeholder {
+  color: #a08a5e !important;
+  font-size: 15px !important;
+}
+
+/* ---------- chat bubbles: terminal paper ---------- */
+[data-conversation-content] [class*="chatBubble"] {
+  background: rgba(24, 32, 42, 0.9) !important;
+  border: 1px solid rgba(232, 160, 32, 0.2) !important;
+  box-shadow: inset 0 0 24px rgba(232, 160, 32, 0.04);
+  color: var(--moss-text) !important;
+}
+[data-conversation-content] [class*="chatBubble"] code {
+  background: #0d141c !important;
+  border: 1px solid var(--moss-amber-d) !important;
+  color: var(--moss-amber-b) !important;
+}
+
+/* ---------- keep the lens out of interaction ---------- */
+#moss-lens-wrap * { pointer-events: none !important; }
+
+/* ---------- stacking: transcript above the lens ----------
+   #moss-lens-wrap is a fixed layer at z-index 0, and every element left at
+   `z-index: auto` paints below it — which is why the lens sat on top of the
+   messages. Lift the conversation column and the composer to z-index 1 so text
+   reads over the lens while the lens still glows behind it. The page-level
+   grain/vignette stay at z-index 1 on body, so they still cover everything. */
+body[data-dsh-skin-moss-550c] [data-conversation-region] > div:first-child,
+body[data-dsh-skin-moss-550c] [data-conversation-scroll],
+body[data-dsh-skin-moss-550c] [data-conversation-content],
+body[data-dsh-skin-moss-550c] [data-composer-seat],
+body[data-dsh-skin-moss-550c] [data-composer-dock] {
+  position: relative;
+  z-index: 2;
+}
