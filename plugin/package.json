@@ -28,6 +28,15 @@
     "wandering-earth"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xylt/550W-MOSS.git",
+    "directory": "plugin"
+  },
+  "homepage": "https://github.com/xylt/550W-MOSS#readme",
+  "bugs": {
+    "url": "https://github.com/xylt/550W-MOSS/issues"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node --check lib/index.js && node --check lib/client.js"
