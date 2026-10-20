@@ -703,11 +703,13 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   font-weight: 700;
   letter-spacing: 0.16em;
   line-height: 1;
-  color: rgba(214, 232, 255, 0.16);
-  text-shadow: 0 0 26px rgba(255, 45, 45, 0.16);
+  color: rgba(214, 232, 255, 0.3);
+  /* the lens glow sits right behind this block; a dark contact shadow keeps the
+     glyphs readable there instead of dissolving into the red. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 26px rgba(255, 45, 45, 0.2);
 }
 #moss-mark .wm b {
-  color: rgba(255, 45, 45, 0.45);
+  color: rgba(255, 45, 45, 0.62);
   font-weight: 700;
 }
 #moss-mark .wm-sub {
@@ -715,17 +717,18 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
   font-size: clamp(7px, 0.9vmin, 11px);
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(232, 160, 32, 0.34);
+  color: rgba(232, 160, 32, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
 }
 
-/* Chassis is frozen: the black cradle and its red dot rings hold still (the
-   brief was "黑圆红点固定不动"). Only the iris breathes and tracks the pointer,
-   so no ring animation is left running. */
-.m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep {
-  transform-origin: 250px 250px;
-  animation: none;
-}
+/* Ring motion: the two OUTER rings keep their original drift; the tick ring, the
+   dot ring on the black cradle, and the radar sweep stay fixed. The brief was
+   "黑圆红点固定不动" — that is .m-rot-d (dots) plus the disc itself. */
+.m-rot-a, .m-rot-b, .m-rot-c, .m-rot-d, .m-sweep { transform-origin: 250px 250px; }
+.m-rot-b { animation: moss-spin-rev 34s linear infinite; }
+.m-rot-c { animation: moss-spin 90s linear infinite; }
+.m-rot-a, .m-rot-d, .m-sweep { animation: none; }
 .m-iris { transform-origin: 250px 250px; animation: moss-breathe 4.2s ease-in-out infinite; }
 /* Pointer offset lives on its own wrapper, in viewBox user units, so it composes
    with — instead of overwriting — the breathing scale on .m-iris. */
@@ -733,6 +736,8 @@ div[class*="sidebarCol"] [class*="footArea"] [class*="trigger"] [class*="label"]
 .m-core { animation: moss-led-pulse 2.4s ease-in-out infinite; }
 .m-glow { animation: moss-halo 5s ease-in-out infinite; }
 
+@keyframes moss-spin { to { transform: rotate(360deg); } }
+@keyframes moss-spin-rev { to { transform: rotate(-360deg); } }
 @keyframes moss-breathe {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.11); }

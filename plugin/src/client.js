@@ -261,14 +261,20 @@ function mountLens(disposers, isDead) {
       rootStyle.setProperty('--moss-cy', cy + 'px')
 
       // Anchor the watermark under the composer, inside the empty band.
+      // Two guards, both learned from a live report of "the 550W text is not
+      // visible": (1) sit clear of the composer's own glow, and (2) never let
+      // the anchor leave the viewport — a taller composer (or a dock picked up
+      // as the seat) used to push it below the fold.
       let markY = cy + vh * 0.3
       const seat =
         document.querySelector('[data-composer-seat]') ||
         document.querySelector('[data-composer-dock]')
       if (seat && typeof seat.getBoundingClientRect === 'function') {
         const s = seat.getBoundingClientRect()
-        if (s.height > 20) markY = s.bottom + 14
+        if (s.height > 20 && s.bottom < vh * 0.94) markY = s.bottom + 26
       }
+      // Keep the two-line block on screen (≈60px tall) with a little breathing room.
+      markY = Math.max(cy + vh * 0.2, Math.min(markY, vh - 76))
       rootStyle.setProperty('--moss-mark-y', Math.round(markY) + 'px')
     }
   }
