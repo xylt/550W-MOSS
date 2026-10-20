@@ -25,20 +25,20 @@
   <circle cx="250" cy="250" r="238" fill="url(#moss-halo-grad)" class="m-glow" />
 
   <!-- outermost micrometer ring, slow drift.
-       Uniformly spaced dash patterns are rotationally symmetric, so a slow spin
-       reads as no motion at all; the uneven spacing is what makes it visible. -->
+       Long, unequal arcs: a pattern made of many equal repeats aliases against
+       its own period, so several seconds of spinning look like no movement. -->
   <g class="m-rot-c">
     <circle cx="250" cy="250" r="234" stroke="#8a0b0b" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="1 11" />
-    <circle cx="250" cy="250" r="226" stroke="#ff2d2d" stroke-opacity="0.3" stroke-width="2"
-            stroke-dasharray="118 92 44 148" />
+    <circle cx="250" cy="250" r="226" stroke="#ff2d2d" stroke-opacity="0.32" stroke-width="2"
+            stroke-dasharray="300 120 160 200" />
   </g>
 
   <!-- armored housing ring: the layer between the black cradle and the outer red
-       ring. Its dashes are deliberately uneven so the counter-rotation is
-       actually readable. -->
+       ring. Three unequal blocks instead of a dozen repeats — that is what makes
+       the counter-rotation unmistakable. -->
   <g class="m-rot-b">
-    <circle cx="250" cy="250" r="206" stroke="#ff2d2d" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="84 16 40 16" />
-    <circle cx="250" cy="250" r="196" stroke="#ff2d2d" stroke-opacity="0.1" stroke-width="12" stroke-dasharray="14 30 28 44" />
+    <circle cx="250" cy="250" r="206" stroke="#ff2d2d" stroke-opacity="0.34" stroke-width="3" stroke-dasharray="180 60 90 60" />
+    <circle cx="250" cy="250" r="196" stroke="#ff2d2d" stroke-opacity="0.12" stroke-width="12" stroke-dasharray="40 60 18 90" />
   </g>
 
   <!-- rotating tick ring -->
